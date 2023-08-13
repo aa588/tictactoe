@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>* {
+        margin: 0;
+        padding: 0;
+      }
+      
+      body {
+        background-color: black;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+      
+      #game {
+        display: grid;
+        grid-template-columns: 100px 100px 100px;
+        grid-template-rows: 100px 100px 100px;
+        margin-top: 20px;
+      }
+      
+      #game > .square {
+        width: 100px;
+        border: 1px solid gray;
+        text-align: center;
+        vertical-align: center;
+        font-size: 50px;
+      }
+      
+      
+      #panel {
+        font-size: 25px;
+        margin-top: 40px;
+      }
+      
+      #reset{
+        cursor: pointer;
+        background-color: lightgreen;
+        margin-top: 20px;
+        width: 300px;
+        height: 30px;
+        border: none;
+        border-radius: 3px;
+        font-size: 17px;
+      }</style>
+</head>
+<body>
+    <h6 id="panel">win</h6>
+    <div id='game'>
+        <div id="1" class="square"></div>
+        <div id="2" class="square"></div>
+        <div id="3" class="square"></div>
+        <div id="4" class="square"></div>
+        <div id="5" class="square"></div>
+        <div id="6" class="square"></div>
+        <div id="7" class="square"></div>
+        <div id="8" class="square"></div>
+        <div id="9" class="square"></div>
+      <div>   
+      <button onClick="resetGame()" id='reset'>Reset Game</button>
+      <script>
+        
+const playedMoves = [];
+let playerGo = "X";
+let gameover;
+const board = document.querySelector("#game");
+const panel = document.querySelector("#panel");
+const squares = board.querySelectorAll(".square");
+panel.textContent = `Player ${playerGo}'s Go!'`
+
+function resetGame() {
+  playerGo = "X";
+  panel.textContent = `Player ${playerGo}'s Go!'`;
+
+  for (let i = 0; i < squares.length; i++) {
+    squares[i].textContent = "";
+  }
+  gameover = false
+}
+
+squares.forEach((square, id) => {
+  square.addEventListener("click", (e) => handleMove(e, id));
+});
+
+function handleMove(event, id) {
+  if (event.target.innerHTML == "" && !gameover) {
+    playerGo === "X"
+      ? (event.target.innerHTML = "X")
+      : (event.target.innerHTML = "O");
+    playerGo === "X" ? (playerGo = "O") : (playerGo = "X");
+    panel.textContent = `Player ${playerGo}'s Go!'`
+  }
+  checkScore();
+}
+
+function checkScore() {
+  for (let i = 0; i < squares.length; i++) {
+    playedMoves[i] = squares[i].innerHTML;
+  }
+  const winComb1 = `${playedMoves[0]}${playedMoves[1]}${playedMoves[2]}`;
+  const winComb2 = `${playedMoves[3]}${playedMoves[4]}${playedMoves[5]}`;
+  const winComb3 = `${playedMoves[6]}${playedMoves[7]}${playedMoves[8]}`;
+  const winComb4 = `${playedMoves[0]}${playedMoves[3]}${playedMoves[6]}`;
+  const winComb5 = `${playedMoves[1]}${playedMoves[4]}${playedMoves[7]}`;
+  const winComb6 = `${playedMoves[2]}${playedMoves[5]}${playedMoves[8]}`;
+  const winComb7 = `${playedMoves[0]}${playedMoves[4]}${playedMoves[8]}`;
+  const winComb8 = `${playedMoves[2]}${playedMoves[4]}${playedMoves[7]}`;
+  const winCombAll = [
+    winComb1,
+    winComb2,
+    winComb3,
+    winComb4,
+    winComb5,
+    winComb6,
+    winComb7,
+    winComb8,
+  ];
+
+  for (let i = 0; i < winCombAll.length; i++) {
+    if (winCombAll[i] === "XXX") {
+      panel.textContent = 'X Wins!'
+      gameover = true;
+    } else if (winCombAll[i] === "OOO") {
+      panel.textContent = 'O Wins!'
+      gameover = true;
+    }
+  }
+}
+      </script>
+</body>
+</html>
